@@ -45,7 +45,7 @@ export async function createIntake(
     updatedAt: now,
   };
 
-  await setDoc(doc(db, COL_CONTINUITY, rec.careLinkId), rec);
+  await setDoc(doc(db, COL_CONTINUITY, rec.careLinkId), stripUndefined(rec));
 
   if (args.identity) {
     const idv: IdentityVault = {
@@ -54,7 +54,7 @@ export async function createIntake(
       createdAt: now,
       updatedAt: now,
     };
-    await setDoc(doc(db, COL_IDENTITY, rec.careLinkId), idv);
+    await setDoc(doc(db, COL_IDENTITY, rec.careLinkId), stripUndefined(idv));
   }
 
   await writeAudit(
@@ -69,6 +69,21 @@ export async function createIntake(
   );
 
   return rec.careLinkId;
+}
+
+function stripUndefined<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map(stripUndefined) as T;
+  }
+  if (value && typeof value === "object") {
+    const out: Record<string, any> = {};
+    for (const [k, v] of Object.entries(value)) {
+      if (v === undefined) continue;
+      out[k] = stripUndefined(v);
+    }
+    return out as T;
+  }
+  return value;
 }
 
 export async function getContinuityRecord(careLinkId: string) {
