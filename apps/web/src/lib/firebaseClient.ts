@@ -65,8 +65,10 @@ export function getClientFirestore(): Firestore {
     useFetchStreams: false,
   });
 
-  // Offline-first (best-effort). If it fails, continue (browser support varies).
-  enableIndexedDbPersistence(db).catch(() => void 0);
+  // Offline-first (best-effort). Enable only when explicitly requested.
+  if (process.env.NEXT_PUBLIC_FIREBASE_PERSISTENCE === "on") {
+    enableIndexedDbPersistence(db).catch(() => void 0);
+  }
   return db;
 }
 
