@@ -85,6 +85,15 @@ select:focus-visible {
   .grid.two { grid-template-columns: 1fr 1fr; }
 }
 
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 900px) {
+  .grid2 { grid-template-columns: 1fr 1fr; }
+}
+
 .stack {
   display: flex;
   flex-direction: column;
