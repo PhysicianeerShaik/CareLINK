@@ -12,8 +12,20 @@ const faqs = [
     a: "No. Sharing is explicit, time-bound, and revocable. There is no default sharing with law enforcement.",
   },
   {
+    q: "How is identity protected?",
+    a: "Identity data is kept in a restricted vault, separate from continuity records and accessed only by authorized roles.",
+  },
+  {
     q: "Does CareLink track location?",
     a: "No. The platform avoids passive tracking and only allows non-GPS, optional notes when needed.",
+  },
+  {
+    q: "Does this replace EHR or HMIS systems?",
+    a: "No. CareLink complements existing systems by bridging the pre-clinical and transition-of-care gaps.",
+  },
+  {
+    q: "Is it HIPAA compliant?",
+    a: "CareLink follows HIPAA-aligned, privacy-by-design principles without claiming legal compliance.",
   },
 ];
 
