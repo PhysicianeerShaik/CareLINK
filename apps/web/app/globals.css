@@ -95,6 +95,8 @@ select:focus-visible {
 @media (min-width: 900px) {
   .grid2 { grid-template-columns: 1fr 1fr; }
 }
+.risk-grid { justify-items: center; text-align: center; }
+.risk-item { display: flex; gap: 10px; align-items: center; justify-content: center; width: 100%; }
 
 .stack {
   display: flex;

@@ -7,6 +7,10 @@ export async function getUserRole(user: User): Promise<Role> {
   if (role === "student" || role === "advocate" || role === "supervisor" || role === "admin") {
     return role;
   }
+  const devRole = process.env.NEXT_PUBLIC_DEV_ROLE;
+  if (devRole === "student" || devRole === "advocate" || devRole === "supervisor" || devRole === "admin") {
+    return devRole;
+  }
   // Default to student if not assigned; in production you'd likely block instead.
   return "student";
 }

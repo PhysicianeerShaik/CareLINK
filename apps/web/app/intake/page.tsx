@@ -25,6 +25,15 @@ const RISK_FLAGS: RiskFlag[] = [
   "substance_use_disclosed",
 ];
 
+const RISK_LABELS: Record<RiskFlag, string> = {
+  none: "None",
+  medical_decline: "Medical decline",
+  safety_risk: "Safety risk",
+  no_shelter: "No shelter",
+  suicidal_ideation_disclosed: "Suicidal ideation disclosed",
+  substance_use_disclosed: "Substance use disclosed",
+};
+
 export default function IntakePage() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -235,9 +244,9 @@ export default function IntakePage() {
 
           <div className="card">
             <h2 style={{ marginTop: 0 }}>Risk flags (non-diagnostic)</h2>
-            <div className="grid2">
+            <div className="grid2 risk-grid">
               {RISK_FLAGS.map((rf) => (
-                <label key={rf} style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                <label key={rf} className="risk-item">
                   <input
                     type="checkbox"
                     checked={riskFlags.includes(rf)}
@@ -254,7 +263,7 @@ export default function IntakePage() {
                       });
                     }}
                   />
-                  <span className="muted">{rf}</span>
+                  <span className="muted">{RISK_LABELS[rf]}</span>
                 </label>
               ))}
             </div>
@@ -276,7 +285,7 @@ export default function IntakePage() {
           </div>
 
           <div style={{ display: "flex", gap: 12 }}>
-            <button className="button" disabled={busy} onClick={() => void onCreate(user.uid, role)}>
+            <button type="button" className="button" disabled={busy} onClick={() => void onCreate(user.uid, role)}>
               {busy ? "Creating…" : "Create continuity record"}
             </button>
             <a className="button secondary" href="/">Cancel</a>
