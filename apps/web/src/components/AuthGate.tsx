@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
-import { signInGoogle, signOutUser, subscribeAuth } from "@/src/lib/firebaseClient";
+import { hasFirebaseEnv, signInGoogle, signOutUser, subscribeAuth } from "@/src/lib/firebaseClient";
 import { getUserRole } from "@/src/lib/authz";
 import type { Role } from "@/src/types/carelink";
 
@@ -16,6 +16,10 @@ export function AuthGate({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!hasFirebaseEnv()) {
+      setLoading(false);
+      return;
+    }
     const unsub = subscribeAuth(async (u) => {
       setUser(u);
       setRole(null);
@@ -29,6 +33,18 @@ export function AuthGate({
   }, []);
 
   if (loading) return <div className="card">Loading…</div>;
+
+  if (!hasFirebaseEnv()) {
+    return (
+      <div className="card">
+        <h2 style={{ marginTop: 0 }}>Firebase config missing</h2>
+        <p className="muted">
+          Create `apps/web/.env.local` with the `NEXT_PUBLIC_FIREBASE_*` values from Firebase,
+          then restart the dev server.
+        </p>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
