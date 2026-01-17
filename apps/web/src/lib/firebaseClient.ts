@@ -60,8 +60,9 @@ export function getClientFirestore(): Firestore {
   if (db) return db;
   const a = getClientApp();
   db = initializeFirestore(a, {
-    // Helps in constrained networks/local environments.
+    // Force long polling to avoid hanging requests in restricted networks.
     experimentalAutoDetectLongPolling: true,
+    experimentalForceLongPolling: true,
   });
 
   // Offline-first (best-effort). If it fails, continue (browser support varies).
