@@ -8,7 +8,7 @@ import {
   User,
 } from "firebase/auth";
 import {
-  getFirestore,
+  initializeFirestore,
   enableIndexedDbPersistence,
   Firestore,
 } from "firebase/firestore";
@@ -59,7 +59,10 @@ export function getClientApp(): FirebaseApp {
 export function getClientFirestore(): Firestore {
   if (db) return db;
   const a = getClientApp();
-  db = getFirestore(a);
+  db = initializeFirestore(a, {
+    // Helps in constrained networks/local environments.
+    experimentalAutoDetectLongPolling: true,
+  });
 
   // Offline-first (best-effort). If it fails, continue (browser support varies).
   enableIndexedDbPersistence(db).catch(() => void 0);
