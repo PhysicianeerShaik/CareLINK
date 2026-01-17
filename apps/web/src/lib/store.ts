@@ -133,6 +133,7 @@ export async function createShareToken(
     careLinkId: string;
     purpose: ShareToken["purpose"];
     expiresAt: number;
+    summary?: ShareToken["summary"];
   },
   actor: { uid: string; role: Role }
 ): Promise<string> {
@@ -146,12 +147,13 @@ export async function createShareToken(
     createdAt: now,
     expiresAt: args.expiresAt,
     expiresAtTs: Timestamp.fromMillis(args.expiresAt),
+    summary: args.summary,
   };
 
-  await setDoc(doc(db, COL_SHARE, token), {
+  await setDoc(doc(db, COL_SHARE, token), stripUndefined({
     ...st,
     expiresAtTs: Timestamp.fromMillis(args.expiresAt),
-  } as any);
+  }) as any);
 
   await writeAudit(
     {

@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getContinuityRecord, getShareToken, writeAudit } from "@/src/lib/store";
-import type { ContinuityRecord } from "@/src/types/carelink";
+import { getShareToken, writeAudit } from "@/src/lib/store";
+import type { ShareToken } from "@/src/types/carelink";
 
 export default function SharePage() {
   const params = useParams<{ token: string }>();
   const token = params.token;
 
   const [status, setStatus] = useState<"loading" | "error" | "ok" | "expired">("loading");
-  const [rec, setRec] = useState<ContinuityRecord | null>(null);
+  const [summary, setSummary] = useState<ShareToken["summary"] | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -29,9 +29,7 @@ export default function SharePage() {
         setMsg("This link has expired.");
         return;
       }
-      const r = await getContinuityRecord(st.careLinkId);
-      if (!mounted) return;
-      setRec(r);
+      setSummary(st.summary ?? null);
       setStatus("ok");
 
       // Public view audit (anonymous actor); in production capture IP hash / device metadata via server.
@@ -58,16 +56,18 @@ export default function SharePage() {
 
   if (status === "loading") return <div className="card">Loading…</div>;
   if (status !== "ok") return <div className="card">{msg}</div>;
-  if (!rec) return <div className="card">Not found.</div>;
+  if (!summary) return <div className="card">Not found.</div>;
 
   return (
     <div className="stack">
       <div className="card">
         <h1 style={{ marginTop: 0 }}>CareLink Summary</h1>
-        <div className="muted">ID: {rec.careLinkId}</div>
-        <div className="muted">Encounter: {rec.encounter.encounterType} · {rec.encounter.encounterDate}</div>
-        {rec.encounter.approximateLocation ? (
-          <div className="muted">Approx. location: {rec.encounter.approximateLocation}</div>
+        <div className="muted">ID: {token.slice(0, 8).toUpperCase()}</div>
+        <div className="muted">
+          Encounter: {summary.encounterType ?? "—"} · {summary.encounterDate ?? "—"}
+        </div>
+        {summary.approximateLocation ? (
+          <div className="muted">Approx. location: {summary.approximateLocation}</div>
         ) : null}
         <p className="muted small" style={{ marginBottom: 0 }}>
           This page is read-only and tokenized. It does not display identity details.
@@ -77,21 +77,21 @@ export default function SharePage() {
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Goals</h2>
         <ul className="muted">
-          {(rec.goals.length ? rec.goals : ["—"]).map((g, i) => (
+          {(summary.goals?.length ? summary.goals : ["—"]).map((g, i) => (
             <li key={i}>{g}</li>
           ))}
         </ul>
 
         <h2>Next steps</h2>
         <ul className="muted">
-          {(rec.plan.nextStepsForClient.length ? rec.plan.nextStepsForClient : ["—"]).map((s, i) => (
+          {(summary.nextStepsForClient?.length ? summary.nextStepsForClient : ["—"]).map((s, i) => (
             <li key={i}>{s}</li>
           ))}
         </ul>
 
         <h2>Medications (best-effort)</h2>
         <ul className="muted">
-          {(rec.meds.length ? rec.meds : ["—"]).map((m, i) => (
+          {(summary.meds?.length ? summary.meds : ["—"]).map((m, i) => (
             <li key={i}>{m}</li>
           ))}
         </ul>

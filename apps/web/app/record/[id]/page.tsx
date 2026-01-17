@@ -73,8 +73,16 @@ function RecordInner({ careLinkId, uid, role }: { careLinkId: string; uid: strin
     setBusy(true);
     try {
       const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 30; // 30 days
+      const summary = {
+        encounterType: rec?.encounter.encounterType,
+        encounterDate: rec?.encounter.encounterDate,
+        approximateLocation: rec?.encounter.approximateLocation,
+        goals: rec?.goals ?? [],
+        meds: rec?.meds ?? [],
+        nextStepsForClient: rec?.plan.nextStepsForClient ?? [],
+      };
       const token = await createShareToken(
-        { careLinkId, purpose: "patient_summary", expiresAt },
+        { careLinkId, purpose: "patient_summary", expiresAt, summary },
         { uid, role }
       );
       const url = `${window.location.origin}/share/${token}`;

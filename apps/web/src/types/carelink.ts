@@ -96,6 +96,14 @@ export interface ShareToken {
   expiresAt: number;
   revokedAt?: number;
   purpose: "patient_summary" | "clinic_summary" | "housing_summary";
+  summary?: {
+    encounterType?: ContinuityRecord["encounter"]["encounterType"];
+    encounterDate?: ContinuityRecord["encounter"]["encounterDate"];
+    approximateLocation?: ContinuityRecord["encounter"]["approximateLocation"];
+    goals?: ContinuityRecord["goals"];
+    meds?: ContinuityRecord["meds"];
+    nextStepsForClient?: ContinuityRecord["plan"]["nextStepsForClient"];
+  };
 }
 
 export interface AuditEvent {
