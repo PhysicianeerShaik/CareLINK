@@ -25,7 +25,14 @@ export default function RootLayout({
           </header>
           <main className="main">{children}</main>
           <footer className="footer">
-            Privacy-first continuity. Human-led. Minimum necessary data.
+            <div className="footer-inner">
+              <div className="footer-text">Privacy-first. Consent-driven. Human-led.</div>
+              <div className="footer-links">
+                <a href="/docs/privacy">Privacy Architecture</a>
+                <a href="/docs/ethics">Ethics</a>
+                <a href="/docs/faq">FAQ</a>
+              </div>
+            </div>
           </footer>
         </div>
       </body>
