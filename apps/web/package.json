@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "set-claims": "node scripts/setCustomClaims.mjs"
   },
   "dependencies": {
     "firebase": "^10.12.2",
@@ -23,6 +24,7 @@
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@types/uuid": "^9.0.8",
+    "firebase-admin": "^12.5.0",
     "typescript": "^5.4.5"
   }
 }
