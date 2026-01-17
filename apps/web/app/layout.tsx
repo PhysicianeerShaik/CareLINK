@@ -16,10 +16,10 @@ export default function RootLayout({
       <body>
         <div className="shell">
           <header className="header">
-            <div className="brand">
+            <a className="brand" href="/" aria-label="CareLink home">
               <span className="brand-mark" aria-hidden="true" />
-              CareLink Street Consult
-            </div>
+              CareLink
+            </a>
             <nav className="nav" aria-label="Primary">
               <a href="/intake">Intake</a>
               <a href="/docs/privacy">Privacy</a>
