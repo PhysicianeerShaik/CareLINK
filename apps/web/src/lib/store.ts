@@ -207,8 +207,12 @@ export async function writeAudit(
   _actor: { uid: string; role: Role }
 ) {
   const db = getClientFirestore();
-  await addDoc(collection(db, COL_AUDIT), {
-    ...e,
-    at: e.at ?? Date.now(),
-  });
+  try {
+    await addDoc(collection(db, COL_AUDIT), {
+      ...e,
+      at: e.at ?? Date.now(),
+    });
+  } catch {
+    // Audit logging should not block core workflows in constrained setups.
+  }
 }
