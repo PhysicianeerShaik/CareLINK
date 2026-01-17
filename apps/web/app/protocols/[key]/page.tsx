@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-import { AuthGate } from "@/src/components/AuthGate";
 
 type Tier = "green" | "yellow" | "orange" | "red";
 
@@ -53,17 +52,13 @@ const PROTOCOLS: Record<string, { title: string; questions: string[]; redFlags: 
 };
 
 export default function ProtocolDetailPage() {
-  const params = useParams<{ key: string }>();
-  const key = params.key;
+  const params = useParams<{ key?: string }>();
+  const key = Array.isArray(params?.key) ? params.key[0] : params?.key ?? "";
   const proto = PROTOCOLS[key];
 
   if (!proto) return <div className="card">Unknown protocol.</div>;
 
-  return (
-    <AuthGate>
-      {() => <ProtocolUI title={proto.title} questions={proto.questions} redFlags={proto.redFlags} />}
-    </AuthGate>
-  );
+  return <ProtocolUI title={proto.title} questions={proto.questions} redFlags={proto.redFlags} />;
 }
 
 function ProtocolUI({ title, questions, redFlags }: { title: string; questions: string[]; redFlags: string[] }) {

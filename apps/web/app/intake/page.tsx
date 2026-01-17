@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { AuthGate } from "@/src/components/AuthGate";
 import { createIntake, newCareLinkId } from "@/src/lib/store";
+import { canViewIdentity } from "@/src/lib/authz";
 import type { ContinuityRecord, IdentityVault, RiskFlag } from "@/src/types/carelink";
 
 function todayYYYYMMDD(): string {
@@ -27,6 +28,7 @@ const RISK_FLAGS: RiskFlag[] = [
 export default function IntakePage() {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const careLinkId = useMemo(() => newCareLinkId(), []);
 
@@ -67,7 +69,9 @@ export default function IntakePage() {
 
   async function onCreate(uid: string, role: any) {
     setBusy(true);
+    setError(null);
     try {
+      const allowIdentity = canViewIdentity(role);
       const record: Omit<ContinuityRecord, "createdAt" | "updatedAt"> = {
         careLinkId,
         encounter: {
@@ -97,7 +101,7 @@ export default function IntakePage() {
       };
 
       const identity: Omit<IdentityVault, "createdAt" | "updatedAt"> | undefined =
-        preferredName || streetName || phone || backupContact
+        allowIdentity && (preferredName || streetName || phone || backupContact)
           ? {
               careLinkId,
               preferredName: preferredName.trim() || undefined,
@@ -109,6 +113,8 @@ export default function IntakePage() {
 
       await createIntake({ record, identity }, { uid, role });
       router.push(`/record/${careLinkId}`);
+    } catch (e: any) {
+      setError(e?.message ?? "Failed to create intake.");
     } finally {
       setBusy(false);
     }
@@ -124,6 +130,7 @@ export default function IntakePage() {
               Minimum necessary data. Identity is optional. No GPS location.
             </p>
             <div className="tag">CareLink ID: <b>{careLinkId}</b></div>
+            {error ? <div className="tag" style={{ marginTop: 10 }}>{error}</div> : null}
           </div>
 
           <div className="card">
@@ -148,28 +155,37 @@ export default function IntakePage() {
             </div>
           </div>
 
-          <div className="card">
-            <h2 style={{ marginTop: 0 }}>Identity (optional)</h2>
-            <p className="muted">Stored separately in the Identity Vault (Advocate/Admin only).</p>
-            <div className="formGrid">
-              <div>
-                <label>Preferred name</label>
-                <input value={preferredName} onChange={(e) => setPreferredName(e.target.value)} />
-              </div>
-              <div>
-                <label>Street name / alias</label>
-                <input value={streetName} onChange={(e) => setStreetName(e.target.value)} />
-              </div>
-              <div>
-                <label>Phone</label>
-                <input value={phone} onChange={(e) => setPhone(e.target.value)} />
-              </div>
-              <div>
-                <label>Backup contact</label>
-                <input value={backupContact} onChange={(e) => setBackupContact(e.target.value)} />
+          {canViewIdentity(role) ? (
+            <div className="card">
+              <h2 style={{ marginTop: 0 }}>Identity (optional)</h2>
+              <p className="muted">Stored separately in the Identity Vault (Advocate/Admin only).</p>
+              <div className="formGrid">
+                <div>
+                  <label>Preferred name</label>
+                  <input value={preferredName} onChange={(e) => setPreferredName(e.target.value)} />
+                </div>
+                <div>
+                  <label>Street name / alias</label>
+                  <input value={streetName} onChange={(e) => setStreetName(e.target.value)} />
+                </div>
+                <div>
+                  <label>Phone</label>
+                  <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </div>
+                <div>
+                  <label>Backup contact</label>
+                  <input value={backupContact} onChange={(e) => setBackupContact(e.target.value)} />
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="card">
+              <h2 style={{ marginTop: 0 }}>Identity (optional)</h2>
+              <p className="muted">
+                Identity Vault fields are available to Advocate/Admin roles only. Ask an advocate to add identity details.
+              </p>
+            </div>
+          )}
 
           <div className="card">
             <h2 style={{ marginTop: 0 }}>Context</h2>
