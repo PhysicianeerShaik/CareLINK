@@ -30,7 +30,7 @@ export default function HomePage() {
           <div className="hero-copy">
             <h1 className="hero-title-soft">CareLink Street Consult</h1>
             <p className="hero-sub-soft">
-              A human-led continuity tool for people who get lost between outreach, hospitals, and follow-up.
+              A warm, human-led way to keep care connected for people who get lost between outreach, hospitals, and follow‑up.
             </p>
             <div className="cta-row" aria-label="Primary actions">
               <a className="button button-soft" href="/intake">Start a Consult</a>
@@ -53,10 +53,10 @@ export default function HomePage() {
       <section className="section-soft fade-in" style={{ animationDelay: "0.1s" }}>
         <div className="container">
           <div className="card soft-card">
-            <h2 style={{ marginTop: 0 }}>A gentle bridge between systems</h2>
+            <h2 style={{ marginTop: 0 }}>A gentle bridge between people</h2>
             <p className="muted">
-              CareLink keeps a simple continuity record so outreach teams and partners can stay aligned
-              without collecting more than necessary. It complements EHR/HMIS workflows but does not replace them.
+              CareLink helps teams remember what matters, protect dignity, and follow through across handoffs.
+              AI assists with organizing notes and next steps; humans lead the care. No surveillance.
             </p>
             <div className="steps" aria-label="CareLink steps">
               <div className="step">Meet</div>
