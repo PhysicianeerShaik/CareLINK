@@ -62,6 +62,7 @@ export function getClientFirestore(): Firestore {
   db = initializeFirestore(a, {
     // Force long polling to avoid hanging requests in restricted networks.
     experimentalForceLongPolling: true,
+    useFetchStreams: false,
   });
 
   // Offline-first (best-effort). If it fails, continue (browser support varies).
