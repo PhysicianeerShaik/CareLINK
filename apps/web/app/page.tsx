@@ -1,3 +1,8 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 type Founder = {
   name: string;
   role: string;
@@ -27,6 +32,15 @@ const founders: Founder[] = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
+  const [lookupId, setLookupId] = useState("");
+
+  function goToRecord() {
+    const id = lookupId.trim();
+    if (!id) return;
+    router.push(`/record/${encodeURIComponent(id)}`);
+  }
+
   return (
     <div className="landing-soft">
       <section className="hero-soft">
@@ -44,6 +58,21 @@ export default function HomePage() {
               {["Human-led", "Consent-driven", "No surveillance"].map((item) => (
                 <span key={item} className="pill" role="listitem">{item}</span>
               ))}
+            </div>
+            <div className="return-visit">
+              <div className="return-title">Returning patient?</div>
+              <div className="return-row">
+                <input
+                  className="return-input"
+                  value={lookupId}
+                  onChange={(e) => setLookupId(e.target.value)}
+                  placeholder="Enter CareLink ID"
+                  aria-label="CareLink ID"
+                />
+                <button type="button" className="button secondary" onClick={goToRecord}>
+                  Open record
+                </button>
+              </div>
             </div>
           </div>
           <div className="hero-art" aria-hidden="true">

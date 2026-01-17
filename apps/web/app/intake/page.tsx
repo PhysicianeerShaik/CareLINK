@@ -68,6 +68,7 @@ export default function IntakePage() {
 
   const [tasksText, setTasksText] = useState("");
   const [nextStepsClientText, setNextStepsClientText] = useState("");
+  const [lookupId, setLookupId] = useState("");
 
   function parseLines(s: string): string[] {
     return s
@@ -137,6 +138,12 @@ export default function IntakePage() {
     }
   }
 
+  function goToRecord() {
+    const id = lookupId.trim();
+    if (!id) return;
+    router.push(`/record/${encodeURIComponent(id)}`);
+  }
+
   return (
     <AuthGate>
       {({ user, role }) => (
@@ -148,6 +155,23 @@ export default function IntakePage() {
             </p>
             <div className="tag">CareLink ID: <b>{careLinkId}</b></div>
             {error ? <div className="alert error" role="alert">{error}</div> : null}
+          </div>
+
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Returning patient</h2>
+            <p className="muted">Enter a CareLink ID to open an existing record.</p>
+            <div className="return-row">
+              <input
+                className="return-input"
+                value={lookupId}
+                onChange={(e) => setLookupId(e.target.value)}
+                placeholder="Enter CareLink ID"
+                aria-label="CareLink ID"
+              />
+              <button type="button" className="button secondary" onClick={goToRecord}>
+                Open record
+              </button>
+            </div>
           </div>
 
           <div className="card">

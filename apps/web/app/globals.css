@@ -396,6 +396,10 @@ hr { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
 }
 .soft-link { color: #2d6f5f; font-weight: 600; }
 .trust-row-soft { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; }
+.return-visit { margin-top: 20px; }
+.return-title { font-weight: 600; margin-bottom: 8px; }
+.return-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.return-input { min-width: 220px; max-width: 320px; }
 .pill {
   padding: 8px 14px;
   border-radius: 999px;
