@@ -415,8 +415,9 @@ hr { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
   .founders-soft { grid-template-columns: repeat(3, 1fr); }
 }
 .founder-soft { display: grid; gap: 16px; }
+.founder-soft { text-align: center; }
 .avatar-soft {
-  width: 100%;
+  width: 85%;
   height: auto;
   aspect-ratio: 3 / 4;
   border-radius: 18px;
@@ -424,4 +425,5 @@ hr { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
   object-fit: cover;
   object-position: center;
   border: 1px solid rgba(230, 221, 211, 0.7);
+  margin: 0 auto;
 }
