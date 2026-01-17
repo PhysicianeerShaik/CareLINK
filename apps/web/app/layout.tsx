@@ -16,12 +16,16 @@ export default function RootLayout({
       <body>
         <div className="shell">
           <header className="header">
-            <div className="brand">CareLink Street Consult</div>
-            <nav className="nav">
-              <a href="/intake">New Intake</a>
-              <a href="/protocols">Protocols</a>
-              <a href="/admin">Admin</a>
+            <div className="brand">
+              <span className="brand-mark" aria-hidden="true" />
+              CareLink Street Consult
+            </div>
+            <nav className="nav" aria-label="Primary">
+              <a href="/intake">Intake</a>
+              <a href="/docs/privacy">Privacy</a>
+              <a href="/docs/faq">FAQ</a>
             </nav>
+            <a className="button nav-cta" href="/intake">Start Consult</a>
           </header>
           <main className="main">{children}</main>
           <footer className="footer">

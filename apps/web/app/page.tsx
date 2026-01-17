@@ -61,13 +61,20 @@ export default function HomePage() {
               Human-led, AI-supported continuity for the pre-clinical phase of care.
               Built for street outreach, discharge transitions, and re-engagement with privacy-first architecture.
             </p>
-            <div className="cta-row">
+            <div className="cta-row" aria-label="Primary actions">
               <a className="button" href="/intake">Start a Street Consult</a>
               <a className="button secondary" href="/docs/privacy">View Privacy-First Architecture</a>
               <a className="link" href="/share/demo">Patient-held Summary Demo</a>
             </div>
             <div className="hero-note">
               Not an EHR or HMIS. Not a chatbot. No surveillance. Consent-driven and minimum necessary.
+            </div>
+            <div className="trust-row" role="list" aria-label="Trust signals">
+              {["Human-led", "Consent-driven", "No surveillance", "Minimum necessary data"].map((item) => (
+                <div key={item} className="trust-chip" role="listitem">
+                  {item}
+                </div>
+              ))}
             </div>
           </div>
           <div className="hero-card">
