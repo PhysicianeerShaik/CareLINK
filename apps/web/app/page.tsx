@@ -2,6 +2,7 @@ type Founder = {
   name: string;
   role: string;
   bio: string;
+  image: string;
 };
 
 const founders: Founder[] = [
@@ -9,16 +10,19 @@ const founders: Founder[] = [
     name: "Joseph Marinick",
     role: "Founder & Community Health Architect",
     bio: "Leads CareLink’s vision and community-first approach, grounded in direct outreach experience and a focus on preserving dignity, trust, and continuity for people navigating care outside formal systems.",
+    image: "/founders/joseph.png",
   },
   {
     name: "Sabour Shaik",
     role: "Founding Engineer & Clinical Systems Lead",
     bio: "Designs CareLink’s privacy-first architecture and continuity workflows at the intersection of medicine and engineering, ensuring the platform supports real-world care without replacing human judgment.",
+    image: "/founders/sabour.png",
   },
   {
     name: "Musa Salman",
     role: "Founding Partner, Strategy & Partnerships",
     bio: "Guides CareLink’s partnerships and implementation strategy, helping translate on-the-ground needs into sustainable pilots with nonprofits, students, and care organizations.",
+    image: "/founders/musa.png",
   },
 ];
 
@@ -73,7 +77,7 @@ export default function HomePage() {
           <div className="founders-soft">
             {founders.map((f) => (
               <div key={f.name} className="card soft-card founder-soft">
-                <div className="avatar-soft" aria-hidden="true" />
+                <img className="avatar-soft" src={f.image} alt={`${f.name} headshot`} />
                 <div>
                   <div className="founder-name">{f.name}</div>
                   <div className="muted">{f.role}</div>
