@@ -61,7 +61,6 @@ export function getClientFirestore(): Firestore {
   const a = getClientApp();
   db = initializeFirestore(a, {
     // Force long polling to avoid hanging requests in restricted networks.
-    experimentalAutoDetectLongPolling: true,
     experimentalForceLongPolling: true,
   });
 
