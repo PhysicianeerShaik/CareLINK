@@ -328,6 +328,18 @@ hr { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
 .footer-links a { color: var(--accent); font-size: 14px; }
 .footer-meta { color: var(--muted); font-size: 12px; display: grid; gap: 4px; text-align: center; }
 
+.alert {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+.alert.error {
+  background: rgba(212, 106, 106, 0.12);
+  border: 1px solid rgba(212, 106, 106, 0.35);
+  color: #8c2e2e;
+}
+
 .fade-in { animation: fadeUp 0.7s ease both; }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(12px); }

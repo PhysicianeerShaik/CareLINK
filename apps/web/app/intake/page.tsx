@@ -77,6 +77,7 @@ export default function IntakePage() {
   }
 
   async function onCreate(uid: string, role: any) {
+    if (busy) return;
     setBusy(true);
     setError(null);
     try {
@@ -121,7 +122,14 @@ export default function IntakePage() {
           : undefined;
 
       await createIntake({ record, identity }, { uid, role });
-      router.push(`/record/${careLinkId}`);
+      const nextUrl = `/record/${careLinkId}`;
+      router.push(nextUrl);
+      // Fallback navigation if the router does not transition.
+      setTimeout(() => {
+        if (window.location.pathname === "/intake") {
+          window.location.assign(nextUrl);
+        }
+      }, 150);
     } catch (e: any) {
       setError(e?.message ?? "Failed to create intake.");
     } finally {
@@ -139,7 +147,7 @@ export default function IntakePage() {
               Minimum necessary data. Identity is optional. No GPS location.
             </p>
             <div className="tag">CareLink ID: <b>{careLinkId}</b></div>
-            {error ? <div className="tag" style={{ marginTop: 10 }}>{error}</div> : null}
+            {error ? <div className="alert error" role="alert">{error}</div> : null}
           </div>
 
           <div className="card">
