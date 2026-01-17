@@ -1,167 +1,83 @@
 type Founder = {
   name: string;
-  title: string;
+  role: string;
   bio: string;
-  focus: string[];
 };
 
 const founders: Founder[] = [
   {
     name: "Avery Quinn",
-    title: "Founder, Outreach Operations",
-    bio: "Former street outreach lead focused on trauma-informed intake and continuity across encampments and shelters.",
-    focus: ["Outreach", "Care Continuity"],
+    role: "Community Outreach",
+    bio: "Street outreach lead focused on trauma-informed intake and continuity across shelters and encampments.",
   },
   {
     name: "Dr. Samir Patel",
-    title: "Founder, Clinical Liaison",
-    bio: "Hospital discharge coordinator building safer handoffs for the 48-hour to 30-day post-discharge window.",
-    focus: ["Transitions of Care", "Partnerships"],
+    role: "Care Transitions",
+    bio: "Discharge coordinator building safer handoffs during the 48-hour to 30-day risk window.",
   },
   {
     name: "Jordan Reyes",
-    title: "Founder, Privacy & Systems",
-    bio: "Privacy-first product architect focused on minimum necessary data and consent-driven sharing.",
-    focus: ["Privacy Architecture", "Security"],
-  },
-];
-
-const timeline = [
-  {
-    step: "1",
-    title: "Human-led street consult",
-    detail: "Capture concerns, goals, and barriers without forcing identity disclosure.",
-  },
-  {
-    step: "2",
-    title: "Continuity record created",
-    detail: "Pseudonymized record indexed by CareLink ID, separated from identity vault.",
-  },
-  {
-    step: "3",
-    title: "Follow-through planning",
-    detail: "Tasks and next steps owned by the outreach team with partner escalation.",
-  },
-  {
-    step: "4",
-    title: "Patient-held summary",
-    detail: "Tokenized, read-only link shared by consent and revocable anytime.",
+    role: "Privacy & Systems",
+    bio: "Product architect focused on minimum necessary data and consent-driven sharing.",
   },
 ];
 
 export default function HomePage() {
   return (
-    <div className="landing">
-      <section className="hero">
-        <div className="container hero-grid fade-in">
-          <div>
-            <div className="eyebrow">Human-led, AI-supported continuity</div>
-            <h1 className="hero-title">CareLink Street Consult</h1>
-            <p className="hero-sub">
-              Human-led, AI-supported continuity for the pre-clinical phase of care.
-              Built for street outreach, discharge transitions, and re-engagement with privacy-first architecture.
+    <div className="landing-soft">
+      <section className="hero-soft">
+        <div className="container hero-soft-inner fade-in">
+          <div className="hero-copy">
+            <h1 className="hero-title-soft">CareLink Street Consult</h1>
+            <p className="hero-sub-soft">
+              A human-led continuity tool for people who get lost between outreach, hospitals, and follow-up.
             </p>
             <div className="cta-row" aria-label="Primary actions">
-              <a className="button" href="/intake">Start a Street Consult</a>
-              <a className="button secondary" href="/docs/privacy">View Privacy-First Architecture</a>
-              <a className="link" href="/share/demo">Patient-held Summary Demo</a>
+              <a className="button button-soft" href="/intake">Start a Consult</a>
+              <a className="link soft-link" href="/docs/privacy">How CareLink protects privacy</a>
             </div>
-            <div className="hero-note">
-              Not an EHR or HMIS. Not a chatbot. No surveillance. Consent-driven and minimum necessary.
-            </div>
-            <div className="trust-row" role="list" aria-label="Trust signals">
-              {["Human-led", "Consent-driven", "No surveillance", "Minimum necessary data"].map((item) => (
-                <div key={item} className="trust-chip" role="listitem">
-                  {item}
-                </div>
+            <div className="trust-row-soft" role="list" aria-label="Trust signals">
+              {["Human-led", "Consent-driven", "No surveillance"].map((item) => (
+                <span key={item} className="pill" role="listitem">{item}</span>
               ))}
             </div>
           </div>
-          <div className="hero-card">
-            <div className="hero-card-header">
-              <span className="badge">Continuity snapshot</span>
-              <span className="badge">Read-only share</span>
-            </div>
-            <div className="hero-card-body">
-              <div className="hero-kv">
-                <div className="k">CareLink ID</div>
-                <div className="v">CL-7F3A19C2</div>
-                <div className="k">Encounter</div>
-                <div className="v">Street consult, 2 days ago</div>
-                <div className="k">Top concerns</div>
-                <div className="v">Breathing issues, wound care, shelter placement</div>
-                <div className="k">Next steps</div>
-                <div className="v">Clinic referral + follow-up check-in</div>
-              </div>
-              <div className="hero-divider" />
-              <div className="hero-tags">
-                <span className="tag">Identity stored separately</span>
-                <span className="tag">Consent required to share</span>
-              </div>
+          <div className="hero-art" aria-hidden="true">
+            <div className="orb orb-one" />
+            <div className="orb orb-two" />
+            <div className="orb orb-three" />
+          </div>
+        </div>
+      </section>
+
+      <section className="section-soft fade-in" style={{ animationDelay: "0.1s" }}>
+        <div className="container">
+          <div className="card soft-card">
+            <h2 style={{ marginTop: 0 }}>A gentle bridge between systems</h2>
+            <p className="muted">
+              CareLink keeps a simple continuity record so outreach teams and partners can stay aligned
+              without collecting more than necessary. It complements EHR/HMIS workflows but does not replace them.
+            </p>
+            <div className="steps" aria-label="CareLink steps">
+              <div className="step">Meet</div>
+              <div className="step">Capture</div>
+              <div className="step">Follow through</div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="section fade-in" style={{ animationDelay: "0.08s" }}>
+      <section className="section-soft fade-in" style={{ animationDelay: "0.2s" }}>
         <div className="container">
-          <h2 className="section-title">Why it exists</h2>
-          <div className="grid two">
-            <div className="card">
-              <h3 style={{ marginTop: 0 }}>Pre-clinical blind spot</h3>
-              <p className="muted">
-                Most care happens before eligibility and outside formal systems. CareLink preserves continuity in that gap.
-              </p>
-            </div>
-            <div className="card">
-              <h3 style={{ marginTop: 0 }}>Lost referrals</h3>
-              <p className="muted">
-                Discharge plans and street referrals disappear without a bridge. CareLink keeps follow-through visible.
-              </p>
-            </div>
-            <div className="card">
-              <h3 style={{ marginTop: 0 }}>Follow-through ownership</h3>
-              <p className="muted">
-                Outreach teams need a shared memory to track tasks without collecting more than necessary.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section fade-in" style={{ animationDelay: "0.16s" }}>
-        <div className="container">
-          <h2 className="section-title">How it works</h2>
-          <div className="timeline">
-            {timeline.map((t) => (
-              <div key={t.step} className="timeline-item">
-                <div className="timeline-step">{t.step}</div>
-                <div>
-                  <div className="timeline-title">{t.title}</div>
-                  <div className="muted">{t.detail}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section fade-in" style={{ animationDelay: "0.24s" }}>
-        <div className="container">
-          <h2 className="section-title">Founders</h2>
-          <div className="grid two founders-grid">
+          <h2 className="section-title-soft">Built by</h2>
+          <div className="founders-soft">
             {founders.map((f) => (
-              <div key={f.name} className="card founder-card">
-                <div className="founder-avatar" aria-hidden="true" />
+              <div key={f.name} className="card soft-card founder-soft">
+                <div className="avatar-soft" aria-hidden="true" />
                 <div>
                   <div className="founder-name">{f.name}</div>
-                  <div className="muted">{f.title}</div>
+                  <div className="muted">{f.role}</div>
                   <p className="muted">{f.bio}</p>
-                  <div className="founder-tags" role="list" aria-label={`${f.name} focus areas`}>
-                    {f.focus.map((tag) => (
-                      <span key={tag} className="trust-chip" role="listitem">{tag}</span>
-                    ))}
-                  </div>
                 </div>
               </div>
             ))}
@@ -171,7 +87,6 @@ export default function HomePage() {
           </p>
         </div>
       </section>
-
     </div>
   );
 }

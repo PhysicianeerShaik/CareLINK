@@ -30,7 +30,7 @@ export default function RootLayout({
           <main className="main">{children}</main>
           <footer className="footer">
             <div className="footer-inner">
-              <div className="footer-text">Privacy-first. Consent-driven. Human-led.</div>
+              <div className="footer-text">Privacy-first. Patient-controlled. Human-led.</div>
               <div className="footer-links">
                 <a href="/docs/privacy">Privacy Architecture</a>
                 <a href="/docs/ethics">Ethics</a>
