@@ -123,7 +123,7 @@ export default function IntakePage() {
   return (
     <AuthGate>
       {({ user, role }) => (
-        <div className="stack">
+        <div className="container stack">
           <div className="card">
             <h1 style={{ marginTop: 0 }}>New Intake</h1>
             <p className="muted">

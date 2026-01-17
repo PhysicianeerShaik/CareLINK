@@ -90,7 +90,7 @@ function RecordInner({ careLinkId, uid, role }: { careLinkId: string; uid: strin
   if (!rec) return <div className="card">Record not found or loading…</div>;
 
   return (
-    <div className="stack">
+    <div className="container stack">
       <div className="card">
         <h1 style={{ marginTop: 0 }}>{rec.careLinkId}</h1>
         <div className="muted">
