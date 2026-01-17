@@ -121,7 +121,7 @@ export default function IntakePage() {
             }
           : undefined;
 
-      await createIntake({ record, identity }, { uid, role });
+      await withTimeout(createIntake({ record, identity }, { uid, role }), 12000);
       const nextUrl = `/record/${careLinkId}`;
       router.push(nextUrl);
       // Fallback navigation if the router does not transition.
@@ -302,4 +302,17 @@ export default function IntakePage() {
       )}
     </AuthGate>
   );
+}
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const id = setTimeout(() => reject(new Error("Request timed out. Check Firestore rules or network.")), ms);
+    p.then((value) => {
+      clearTimeout(id);
+      resolve(value);
+    }).catch((err) => {
+      clearTimeout(id);
+      reject(err);
+    });
+  });
 }
