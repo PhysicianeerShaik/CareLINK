@@ -6,19 +6,19 @@ type Founder = {
 
 const founders: Founder[] = [
   {
-    name: "Avery Quinn",
-    role: "Community Outreach",
-    bio: "Street outreach lead focused on trauma-informed intake and continuity across shelters and encampments.",
+    name: "Joseph Marinick",
+    role: "Founder & Community Health Architect",
+    bio: "Leads CareLink’s vision and community-first approach, grounded in direct outreach experience and a focus on preserving dignity, trust, and continuity for people navigating care outside formal systems.",
   },
   {
-    name: "Dr. Samir Patel",
-    role: "Care Transitions",
-    bio: "Discharge coordinator building safer handoffs during the 48-hour to 30-day risk window.",
+    name: "Sabour Shaik",
+    role: "Founding Engineer & Clinical Systems Lead",
+    bio: "Designs CareLink’s privacy-first architecture and continuity workflows at the intersection of medicine and engineering, ensuring the platform supports real-world care without replacing human judgment.",
   },
   {
-    name: "Jordan Reyes",
-    role: "Privacy & Systems",
-    bio: "Product architect focused on minimum necessary data and consent-driven sharing.",
+    name: "Musa Salman",
+    role: "Founding Partner, Strategy & Partnerships",
+    bio: "Guides CareLink’s partnerships and implementation strategy, helping translate on-the-ground needs into sustainable pilots with nonprofits, students, and care organizations.",
   },
 ];
 

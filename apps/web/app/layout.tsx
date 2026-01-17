@@ -37,6 +37,10 @@ export default function RootLayout({
                 <a href="/docs/faq">FAQ</a>
                 <a href="/contact">Contact CareLink</a>
               </div>
+              <div className="footer-meta">
+                <div>© 2026 CareLink. All rights reserved.</div>
+                <div>Built to preserve dignity, continuity, and consent.</div>
+              </div>
             </div>
           </footer>
         </div>

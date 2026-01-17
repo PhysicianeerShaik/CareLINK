@@ -315,6 +315,7 @@ hr { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
 .footer-text { color: var(--muted); font-size: 14px; }
 .footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
 .footer-links a { color: var(--accent); font-size: 14px; }
+.footer-meta { color: var(--muted); font-size: 12px; display: grid; gap: 4px; }
 
 .fade-in { animation: fadeUp 0.7s ease both; }
 @keyframes fadeUp {
