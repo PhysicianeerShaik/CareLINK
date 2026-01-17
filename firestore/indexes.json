@@ -1,0 +1,12 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "continuityRecords",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "updatedAt", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

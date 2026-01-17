@@ -1,0 +1,272 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { AuthGate } from "@/src/components/AuthGate";
+import { createIntake, newCareLinkId } from "@/src/lib/store";
+import type { ContinuityRecord, IdentityVault, RiskFlag } from "@/src/types/carelink";
+
+function todayYYYYMMDD(): string {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+const RISK_FLAGS: RiskFlag[] = [
+  "none",
+  "medical_decline",
+  "safety_risk",
+  "no_shelter",
+  "suicidal_ideation_disclosed",
+  "substance_use_disclosed",
+];
+
+export default function IntakePage() {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+
+  const careLinkId = useMemo(() => newCareLinkId(), []);
+
+  const [encounterType, setEncounterType] = useState<
+    ContinuityRecord["encounter"]["encounterType"]
+  >("street");
+  const [encounterDate, setEncounterDate] = useState(todayYYYYMMDD());
+  const [approxLoc, setApproxLoc] = useState("");
+
+  // Identity (optional)
+  const [preferredName, setPreferredName] = useState("");
+  const [streetName, setStreetName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [backupContact, setBackupContact] = useState("");
+
+  // Context
+  const [housingSituation, setHousingSituation] = useState("");
+  const [phoneAccess, setPhoneAccess] = useState<"yes" | "sometimes" | "no">("no");
+  const [idDocuments, setIdDocuments] = useState<
+    "has" | "in_progress" | "none" | "unknown"
+  >("unknown");
+
+  const [concernsText, setConcernsText] = useState("");
+  const [medsText, setMedsText] = useState("");
+  const [goalsText, setGoalsText] = useState("");
+
+  const [riskFlags, setRiskFlags] = useState<RiskFlag[]>(["none"]);
+
+  const [tasksText, setTasksText] = useState("");
+  const [nextStepsClientText, setNextStepsClientText] = useState("");
+
+  function parseLines(s: string): string[] {
+    return s
+      .split("\n")
+      .map((x) => x.trim())
+      .filter(Boolean);
+  }
+
+  async function onCreate(uid: string, role: any) {
+    setBusy(true);
+    try {
+      const record: Omit<ContinuityRecord, "createdAt" | "updatedAt"> = {
+        careLinkId,
+        encounter: {
+          encounterType,
+          encounterDate,
+          approximateLocation: approxLoc.trim() || undefined,
+        },
+        clientContext: {
+          housingSituation: housingSituation.trim() || undefined,
+          phoneAccess,
+          idDocuments,
+          benefits: {},
+        },
+        concerns: parseLines(concernsText),
+        meds: parseLines(medsText),
+        goals: parseLines(goalsText),
+        riskFlags,
+        plan: {
+          problemList: [],
+          tasks: parseLines(tasksText).map((t) => ({
+            id: uuidv4(),
+            text: t,
+            status: "open" as const,
+          })),
+          nextStepsForClient: parseLines(nextStepsClientText),
+        },
+      };
+
+      const identity: Omit<IdentityVault, "createdAt" | "updatedAt"> | undefined =
+        preferredName || streetName || phone || backupContact
+          ? {
+              careLinkId,
+              preferredName: preferredName.trim() || undefined,
+              streetName: streetName.trim() || undefined,
+              phone: phone.trim() || undefined,
+              backupContact: backupContact.trim() || undefined,
+            }
+          : undefined;
+
+      await createIntake({ record, identity }, { uid, role });
+      router.push(`/record/${careLinkId}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <AuthGate>
+      {({ user, role }) => (
+        <div className="stack">
+          <div className="card">
+            <h1 style={{ marginTop: 0 }}>New Intake</h1>
+            <p className="muted">
+              Minimum necessary data. Identity is optional. No GPS location.
+            </p>
+            <div className="tag">CareLink ID: <b>{careLinkId}</b></div>
+          </div>
+
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Encounter</h2>
+            <div className="formGrid">
+              <div>
+                <label>Encounter type</label>
+                <select value={encounterType} onChange={(e) => setEncounterType(e.target.value as any)}>
+                  <option value="street">Street</option>
+                  <option value="service_day">Service day</option>
+                  <option value="post_discharge">Post-discharge</option>
+                </select>
+              </div>
+              <div>
+                <label>Date</label>
+                <input value={encounterDate} onChange={(e) => setEncounterDate(e.target.value)} />
+              </div>
+            </div>
+            <div style={{ marginTop: 12 }}>
+              <label>Approximate location (optional, non-GPS)</label>
+              <input value={approxLoc} onChange={(e) => setApproxLoc(e.target.value)} placeholder="e.g., Downtown library area" />
+            </div>
+          </div>
+
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Identity (optional)</h2>
+            <p className="muted">Stored separately in the Identity Vault (Advocate/Admin only).</p>
+            <div className="formGrid">
+              <div>
+                <label>Preferred name</label>
+                <input value={preferredName} onChange={(e) => setPreferredName(e.target.value)} />
+              </div>
+              <div>
+                <label>Street name / alias</label>
+                <input value={streetName} onChange={(e) => setStreetName(e.target.value)} />
+              </div>
+              <div>
+                <label>Phone</label>
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+              </div>
+              <div>
+                <label>Backup contact</label>
+                <input value={backupContact} onChange={(e) => setBackupContact(e.target.value)} />
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Context</h2>
+            <div className="formGrid">
+              <div>
+                <label>Phone access</label>
+                <select value={phoneAccess} onChange={(e) => setPhoneAccess(e.target.value as any)}>
+                  <option value="yes">Yes</option>
+                  <option value="sometimes">Sometimes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+              <div>
+                <label>ID / documents</label>
+                <select value={idDocuments} onChange={(e) => setIdDocuments(e.target.value as any)}>
+                  <option value="has">Has</option>
+                  <option value="in_progress">In progress</option>
+                  <option value="none">None</option>
+                  <option value="unknown">Unknown</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ marginTop: 12 }}>
+              <label>Housing situation (optional)</label>
+              <input value={housingSituation} onChange={(e) => setHousingSituation(e.target.value)} placeholder="e.g., unsheltered, couch surfing, shelter" />
+            </div>
+          </div>
+
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Concerns, meds, goals</h2>
+            <p className="muted">One per line.</p>
+            <div className="formGrid">
+              <div>
+                <label>Concerns</label>
+                <textarea value={concernsText} onChange={(e) => setConcernsText(e.target.value)} placeholder="Shortness of breath\nFoot wound\nNeeds primary care" />
+              </div>
+              <div>
+                <label>Medications (best-effort)</label>
+                <textarea value={medsText} onChange={(e) => setMedsText(e.target.value)} placeholder="Metformin (ran out)\nAlbuterol inhaler" />
+              </div>
+            </div>
+            <div style={{ marginTop: 12 }}>
+              <label>Goals</label>
+              <textarea value={goalsText} onChange={(e) => setGoalsText(e.target.value)} placeholder="Get an ID\nConnect to a clinic\nGet shelter placement" />
+            </div>
+          </div>
+
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Risk flags (non-diagnostic)</h2>
+            <div className="grid2">
+              {RISK_FLAGS.map((rf) => (
+                <label key={rf} style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={riskFlags.includes(rf)}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setRiskFlags((prev) => {
+                        const next = new Set(prev);
+                        if (checked) next.add(rf);
+                        else next.delete(rf);
+                        // If any non-none selected, remove "none"
+                        if (next.size > 1) next.delete("none");
+                        if (next.size === 0) next.add("none");
+                        return Array.from(next);
+                      });
+                    }}
+                  />
+                  <span className="muted">{rf}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="card">
+            <h2 style={{ marginTop: 0 }}>Plan</h2>
+            <p className="muted">CareLink documents follow-through, not just referrals.</p>
+            <div className="formGrid">
+              <div>
+                <label>Tasks (one per line)</label>
+                <textarea value={tasksText} onChange={(e) => setTasksText(e.target.value)} placeholder="Schedule clinic appointment\nHelp replace lost ID\nMedication pickup" />
+              </div>
+              <div>
+                <label>Next steps for client (one per line)</label>
+                <textarea value={nextStepsClientText} onChange={(e) => setNextStepsClientText(e.target.value)} placeholder="Return here on Tuesday\nBring continuity card to clinic" />
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 12 }}>
+            <button className="button" disabled={busy} onClick={() => void onCreate(user.uid, role)}>
+              {busy ? "Creating…" : "Create continuity record"}
+            </button>
+            <a className="button secondary" href="/">Cancel</a>
+          </div>
+        </div>
+      )}
+    </AuthGate>
+  );
+}
