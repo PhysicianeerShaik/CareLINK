@@ -35,6 +35,7 @@ export default function RootLayout({
                 <a href="/docs/privacy">Privacy Architecture</a>
                 <a href="/docs/ethics">Ethics</a>
                 <a href="/docs/faq">FAQ</a>
+                <a href="/contact">Contact CareLink</a>
               </div>
             </div>
           </footer>

@@ -2,7 +2,7 @@ type Founder = {
   name: string;
   title: string;
   bio: string;
-  email: string;
+  focus: string[];
 };
 
 const founders: Founder[] = [
@@ -10,19 +10,19 @@ const founders: Founder[] = [
     name: "Avery Quinn",
     title: "Founder, Outreach Operations",
     bio: "Former street outreach lead focused on trauma-informed intake and continuity across encampments and shelters.",
-    email: "contact@carelink.example",
+    focus: ["Outreach", "Care Continuity"],
   },
   {
     name: "Dr. Samir Patel",
     title: "Founder, Clinical Liaison",
     bio: "Hospital discharge coordinator building safer handoffs for the 48-hour to 30-day post-discharge window.",
-    email: "clinical@carelink.example",
+    focus: ["Transitions of Care", "Partnerships"],
   },
   {
     name: "Jordan Reyes",
     title: "Founder, Privacy & Systems",
     bio: "Privacy-first product architect focused on minimum necessary data and consent-driven sharing.",
-    email: "privacy@carelink.example",
+    focus: ["Privacy Architecture", "Security"],
   },
 ];
 
@@ -157,11 +157,18 @@ export default function HomePage() {
                   <div className="founder-name">{f.name}</div>
                   <div className="muted">{f.title}</div>
                   <p className="muted">{f.bio}</p>
-                  <a className="button secondary" href={`mailto:${f.email}`}>Contact</a>
+                  <div className="founder-tags" role="list" aria-label={`${f.name} focus areas`}>
+                    {f.focus.map((tag) => (
+                      <span key={tag} className="trust-chip" role="listitem">{tag}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+          <p className="muted founders-disclaimer">
+            CareLink is in development and intended for pilot testing with nonprofit partners.
+          </p>
         </div>
       </section>
 
