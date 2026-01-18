@@ -34,6 +34,7 @@ function RecordInner({ careLinkId, uid, role }: { careLinkId: string; uid: strin
 
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [shareErr, setShareErr] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -71,6 +72,7 @@ function RecordInner({ careLinkId, uid, role }: { careLinkId: string; uid: strin
 
   async function makePatientSummaryShare() {
     setBusy(true);
+    setShareErr(null);
     try {
       const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 30; // 30 days
       const summary = {
@@ -89,6 +91,8 @@ function RecordInner({ careLinkId, uid, role }: { careLinkId: string; uid: strin
       setShareUrl(url);
       const png = await QRCode.toDataURL(url, { margin: 1, width: 240 });
       setQrDataUrl(png);
+    } catch (e: any) {
+      setShareErr(e?.message ?? "Failed to generate share link.");
     } finally {
       setBusy(false);
     }
@@ -174,6 +178,7 @@ function RecordInner({ careLinkId, uid, role }: { careLinkId: string; uid: strin
         <button className="button" disabled={busy} onClick={() => void makePatientSummaryShare()}>
           {busy ? "Generating…" : "Create 30-day summary link"}
         </button>
+        {shareErr ? <div className="alert error" role="alert">{shareErr}</div> : null}
 
         {shareUrl && (
           <div style={{ marginTop: 12 }}>
