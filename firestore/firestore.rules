@@ -42,10 +42,7 @@ service cloud.firestore {
     // Public read-only access is allowed ONLY via direct doc get, and ONLY if token is unexpired and not revoked.
     match /shareTokens/{token} {
       allow get: if (resource.data.revokedAt == null)
-                  && (
-                    (resource.data.expiresAtTs != null && resource.data.expiresAtTs > request.time)
-                    || (resource.data.expiresAt != null && resource.data.expiresAt > request.time.toMillis())
-                  );
+                  && (resource.data.expiresAt != null && resource.data.expiresAt > request.time.toMillis());
       allow list: if false;
       allow create: if signedIn(); // in practice: advocate/admin
       allow update: if signedIn(); // to revoke
